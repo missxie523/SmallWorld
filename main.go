@@ -83,8 +83,6 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	if val := r.URL.Query().Get("range"); val != "" {
 		ran = val + "km"
 	}
-
-
 	fmt.Printf( "Search received: %f %f %s\n", lat, lon, ran)
 
 	// Create a client
@@ -125,9 +123,7 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 		p := item.(Post) // p = (Post) item
 		fmt.Printf("Post by %s: %s at lat %v and lon %v\n", p.User, p.Message, p.Location.Lat, p.Location.Lon)
 		// TODO(student homework): Perform filtering based on keywords such as web spam etc.
-		//if !containsFilteredWords(&p.Message) {
-			//ps = append(ps, p)
-		//}
+		ps = append(ps, p)
 
 	}
 	js, err := json.Marshal(ps)
