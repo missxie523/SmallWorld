@@ -92,7 +92,7 @@ const (
 	DISTANCE = "200km"
 	// Needs to update
 	PROJECT_ID = "smallworld-0616"
-	BT_INSTANCE = "smallworld-post-0617"
+	BT_INSTANCE = "smallworld-post-2-0617"
 	// Needs to update this URL if you deploy it to cloud.
 	//ES_URL = "http://35.224.38.226:9200"
 	ES_URL = "http://35.237.227.43:9200"
