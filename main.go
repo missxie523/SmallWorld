@@ -129,8 +129,7 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 		p := item.(Post) // p = (Post) item
 		fmt.Printf("Post by %s: %s at lat %v and lon %v\n", p.User, p.Message, p.Location.Lat, p.Location.Lon)
 		// TODO(student homework): Perform filtering based on keywords such as web spam etc.
-		ps = append(ps, p)
-
+		//ps = append(ps, p)
 	}
 	js, err := json.Marshal(ps)
 	if err != nil {
