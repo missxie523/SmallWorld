@@ -24,7 +24,7 @@ type Post struct {
 	User     string `json:"user"`
 	Message  string  `json:"message"`
 	Location Location `json:"location"`
-	Url    string `json:"url"`
+	Url    	 string `json:"url"`
 }
 const (
 	INDEX = "smallworld"
@@ -36,7 +36,7 @@ const (
 	// Needs to update this URL if you deploy it to cloud.
 	ES_URL = "http://35.237.156.49:9200"
 	// Needs to update this bucket based on your gcs bucket name.
-	BUCKET_NAME = "post-images-0616"
+	BUCKET_NAME = "post-image-0616"
 )
 
 func main() {
@@ -78,18 +78,18 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-
-
 func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Received one request for search")
 	lat, _ := strconv.ParseFloat(r.URL.Query().Get("lat"), 64)
 	lon, _ := strconv.ParseFloat(r.URL.Query().Get("lon"), 64)
+
 	// range is optional
 	ran := DISTANCE
 	if val := r.URL.Query().Get("range"); val != "" {
 		ran = val + "km"
 	}
-	fmt.Printf( "Search received: %f %f %s\n", lat, lon, ran)
+
+	fmt.Printf("Search received: %f %f %s\n", lat, lon, ran)
 
 	// Create a client
 	client, err := elastic.NewClient(elastic.SetURL(ES_URL), elastic.SetSniff(false))
@@ -141,6 +141,7 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Write(js)
+
 }
 
 func handlerPost(w http.ResponseWriter, r *http.Request) {
@@ -153,8 +154,10 @@ func handlerPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id := uuid.New()
+
 	// Save to ES.
-	saveToES(&p, id)
+	//saveToES(&p, id)
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Authorization")
@@ -169,7 +172,7 @@ func handlerPost(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Received one post request %s\n", r.FormValue("message"))
 	lat, _ := strconv.ParseFloat(r.FormValue("lat"), 64)
 	lon, _ := strconv.ParseFloat(r.FormValue("lon"), 64)
-	p := &Post{
+	p = Post{
 		User:    "1111",
 		Message: r.FormValue("message"),
 		Location: Location{
@@ -178,7 +181,7 @@ func handlerPost(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	id := uuid.New()
+	id = uuid.New()
 
 	file, _, err := r.FormFile("image")
 	if err != nil {
@@ -202,11 +205,12 @@ func handlerPost(w http.ResponseWriter, r *http.Request) {
 	p.Url = attrs.MediaLink
 
 	// Save to ES.
-	saveToES(p, id)
+	saveToES(&p, id)
 
 	// Save to BigTable.
 	//saveToBigTable(p, id)
 }
+// Save an image to GCS.
 func saveToGCS(ctx context.Context, r io.Reader, bucketName, name string) (*storage.ObjectHandle, *storage.ObjectAttrs, error) {
 	client, err := storage.NewClient(ctx)
 	if err != nil {
@@ -229,7 +233,6 @@ func saveToGCS(ctx context.Context, r io.Reader, bucketName, name string) (*stor
 		return nil, nil, err
 	}
 
-
 	if err := obj.ACL().Set(ctx, storage.AllUsers, storage.RoleReader); err != nil {
 		return nil, nil, err
 	}
@@ -245,6 +248,7 @@ func saveToES(p *Post, id string) {
 	es_client, err := elastic.NewClient(elastic.SetURL(ES_URL), elastic.SetSniff(false))
 	if err != nil {
 		panic(err)
+
 		return
 	}
 
