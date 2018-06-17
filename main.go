@@ -95,7 +95,7 @@ const (
 	BT_INSTANCE = "smallworld-post-0617"
 	// Needs to update this URL if you deploy it to cloud.
 	//ES_URL = "http://35.224.38.226:9200"
-	ES_URL = "http://35.237.75.166:9200"
+	ES_URL = "http://35.237.227.43:9200"
 
 	// Needs to update this bucket based on your gcs bucket name.
 	BUCKET_NAME = "post-image-0616"
