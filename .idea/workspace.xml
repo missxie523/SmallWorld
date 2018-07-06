@@ -83,6 +83,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../dataflow/.idea/vcs.xml" afterPath="$PROJECT_DIR$/../dataflow/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../dataflow/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../dataflow/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.go" afterPath="$PROJECT_DIR$/main.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -100,8 +101,8 @@
       <file leaf-file-name="main.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="97" column="36" lean-forward="false" selection-start-line="97" selection-start-column="36" selection-end-line="97" selection-end-column="36" />
+            <state relative-caret-position="220">
+              <caret line="100" column="38" lean-forward="false" selection-start-line="100" selection-start-column="23" selection-end-line="100" selection-end-column="38" />
               <folding>
                 <element signature="e#14#330#0" expanded="true" />
               </folding>
@@ -143,6 +144,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>p</find>
+      <find>allow</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -527,7 +529,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1048" extended-state="0" />
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -841,8 +843,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="97" column="36" lean-forward="false" selection-start-line="97" selection-start-column="36" selection-end-line="97" selection-end-column="36" />
+        <state relative-caret-position="220">
+          <caret line="100" column="38" lean-forward="false" selection-start-line="100" selection-start-column="23" selection-end-line="100" selection-end-column="38" />
           <folding>
             <element signature="e#14#330#0" expanded="true" />
           </folding>
