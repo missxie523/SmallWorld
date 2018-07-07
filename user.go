@@ -2,11 +2,11 @@ package main
 
 import (
 	elastic "gopkg.in/olivere/elastic.v3"
+
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"reflect"
-	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -19,10 +19,7 @@ const (
 type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
-	Age      int    `json:"age"`
-	Gender   string `json:"gender"`
 }
-
 // checkUser checks whether user is valid
 func checkUser(username, password string) bool {
 	es_client, err := elastic.NewClient(elastic.SetURL(ES_URL), elastic.SetSniff(false))
@@ -51,9 +48,8 @@ func checkUser(username, password string) bool {
 	// If no user exist, return false.
 	return false
 }
-
 // Add a new user. Return true if successfully.
-func addUser(user User) bool {
+func addUser(username, password string) bool {
 	// In theory, BigTable is a better option for storing user credentials than ES. However,
 	// since BT is more expensive than ES so usually students will disable BT.
 	es_client, err := elastic.NewClient(elastic.SetURL(ES_URL), elastic.SetSniff(false))
@@ -62,8 +58,13 @@ func addUser(user User) bool {
 		return false
 	}
 
+	user := &User{
+		Username: username,
+		Password: password,
+	}
+
 	// Search with a term query
-	termQuery := elastic.NewTermQuery("username", user.Username)
+	termQuery := elastic.NewTermQuery("username", username)
 	queryResult, err := es_client.Search().
 		Index(INDEX).
 		Query(termQuery).
@@ -75,7 +76,7 @@ func addUser(user User) bool {
 	}
 
 	if queryResult.TotalHits() > 0 {
-		fmt.Printf("User %s has existed, cannot create duplicate user.\n", user.Username)
+		fmt.Printf("User %s already exists, cannot create duplicate user.\n", username)
 		return false
 	}
 
@@ -83,7 +84,7 @@ func addUser(user User) bool {
 	_, err = es_client.Index().
 		Index(INDEX).
 		Type(TYPE_USER).
-		Id(user.Username).
+		Id(username).
 		BodyJson(user).
 		Refresh(true).
 		Do()
@@ -92,9 +93,7 @@ func addUser(user User) bool {
 		return false
 	}
 	return true
-
 }
-
 // If signup is successful, a new session is created.
 func signupHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Received one signup request")
@@ -105,10 +104,9 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 		return
 	}
-	u.Username = strings.ToLower(u.Username)
 
 	if u.Username != "" && u.Password != "" {
-		if addUser(u) {
+		if addUser(u.Username, u.Password) {
 			fmt.Println("User added successfully.")
 			w.Write([]byte("User added successfully."))
 		} else {
@@ -122,8 +120,8 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/plain")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Authorization")
 }
-
 // If login is successful, a new token is created.
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Received one login request")
@@ -134,7 +132,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 		return
 	}
-	u.Username = strings.ToLower(u.Username)
 
 	if checkUser(u.Username, u.Password) {
 		token := jwt.New(jwt.SigningMethodHS256)
@@ -155,4 +152,5 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/plain")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Authorization")
 }
