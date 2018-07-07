@@ -7,16 +7,17 @@ import (
 	"fmt"
 	//"github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gorilla/mux"
+	//"github.com/gorilla/mux"
 	"github.com/pborman/uuid"
 	elastic "gopkg.in/olivere/elastic.v3"
 	"io"
-	"log"
+	//"log"
 	"net/http"
 	"reflect"
 	"strconv"
 	"cloud.google.com/go/bigtable"
 	"github.com/go-chi/cors"
+	"github.com/go-chi/chi"
 )
 
 type Location struct {
@@ -68,7 +69,7 @@ func main() {
 	}
 
 	fmt.Println("started-service")
-	r := mux.NewRouter()
+	r := chi.NewRouter()
 
 	/*
 	var jwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
@@ -82,10 +83,11 @@ func main() {
 	r.Handle("/search", jwtMiddleware.Handler(http.HandlerFunc(handlerSearch))).Methods("GET")
 	r.Handle("/login", http.HandlerFunc(loginHandler)).Methods("POST")
 	r.Handle("/signup", http.HandlerFunc(signupHandler)).Methods("POST")
-	*/
+
 
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8080", nil))
+	*/
 
 	c := cors.New(cors.Options{
 		AllowOriginFunc:  AllowOriginFunc,
