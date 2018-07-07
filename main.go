@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	//"github.com/auth0/go-jwt-middleware"
+	"github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
 	//"github.com/gorilla/mux"
 	"github.com/pborman/uuid"
@@ -18,6 +18,8 @@ import (
 	"cloud.google.com/go/bigtable"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/chi"
+	//"github.com/auth0/go-jwt-middleware"
+	"log"
 )
 
 type Location struct {
@@ -78,6 +80,7 @@ func main() {
 		},
 		SigningMethod: jwt.SigningMethodHS256,
 	})
+
 
 	r.Handle("/post", jwtMiddleware.Handler(http.HandlerFunc(handlerPost))).Methods("POST")
 	r.Handle("/search", jwtMiddleware.Handler(http.HandlerFunc(handlerSearch))).Methods("GET")
