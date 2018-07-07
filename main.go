@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	//"github.com/gorilla/mux"
 	"github.com/pborman/uuid"
 	elastic "gopkg.in/olivere/elastic.v3"
 	"io"
@@ -15,9 +14,10 @@ import (
 	"strconv"
 	"cloud.google.com/go/bigtable"
 	"github.com/go-chi/cors"
-	"github.com/go-chi/chi"
-	//"github.com/auth0/go-jwt-middleware"
+	//"github.com/go-chi/chi"
 	"log"
+	"github.com/auth0/go-jwt-middleware"
+	"github.com/gorilla/mux"
 )
 
 type Location struct {
@@ -69,9 +69,9 @@ func main() {
 	}
 
 	fmt.Println("started-service")
-	r := chi.NewRouter()
+	r := mux.NewRouter()
 
-	/*
+
 	var jwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			return mySigningKey, nil
@@ -84,29 +84,22 @@ func main() {
 	r.Handle("/search", jwtMiddleware.Handler(http.HandlerFunc(handlerSearch))).Methods("GET")
 	r.Handle("/login", http.HandlerFunc(loginHandler)).Methods("POST")
 	r.Handle("/signup", http.HandlerFunc(signupHandler)).Methods("POST")
-	*/
+
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 	c := cors.New(cors.Options{
-		AllowOriginFunc:  AllowOriginFunc,
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: true,
-		MaxAge:           300, // Maximum value not ignored by any of major browsers
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders: []string{"*"},
 	})
-	r.Use(c.Handler)
+	handler := c.Handler(r)
 
-	http.ListenAndServe(":8080", r)
-}
-
-func AllowOriginFunc(r *http.Request, origin string) bool {
-
-	if origin == "https://smallworld-0616.appspot.com" {
-		return true
+	log.Println("Listening on port 3000")
+	if err := http.ListenAndServe(":3000", handler); err != nil {
+		log.Fatal(err)
 	}
-	return false
 }
+
 const (
 	INDEX    = "smallworld"
 	TYPE     = "post"
