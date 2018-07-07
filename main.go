@@ -5,13 +5,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
 	//"github.com/gorilla/mux"
 	"github.com/pborman/uuid"
 	elastic "gopkg.in/olivere/elastic.v3"
 	"io"
-	//"log"
 	"net/http"
 	"reflect"
 	"strconv"
@@ -86,12 +84,9 @@ func main() {
 	r.Handle("/search", jwtMiddleware.Handler(http.HandlerFunc(handlerSearch))).Methods("GET")
 	r.Handle("/login", http.HandlerFunc(loginHandler)).Methods("POST")
 	r.Handle("/signup", http.HandlerFunc(signupHandler)).Methods("POST")
-
-
+	*/
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8080", nil))
-	*/
-
 	c := cors.New(cors.Options{
 		AllowOriginFunc:  AllowOriginFunc,
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -104,14 +99,14 @@ func main() {
 
 	http.ListenAndServe(":8080", r)
 }
+
 func AllowOriginFunc(r *http.Request, origin string) bool {
+
 	if origin == "https://smallworld-0616.appspot.com" {
 		return true
 	}
-
 	return false
 }
-
 const (
 	INDEX    = "smallworld"
 	TYPE     = "post"
