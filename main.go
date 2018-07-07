@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/auth0/go-jwt-middleware"
+	//"github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	"github.com/pborman/uuid"
@@ -70,6 +70,7 @@ func main() {
 	fmt.Println("started-service")
 	r := mux.NewRouter()
 
+	/*
 	var jwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			return mySigningKey, nil
@@ -81,6 +82,7 @@ func main() {
 	r.Handle("/search", jwtMiddleware.Handler(http.HandlerFunc(handlerSearch))).Methods("GET")
 	r.Handle("/login", http.HandlerFunc(loginHandler)).Methods("POST")
 	r.Handle("/signup", http.HandlerFunc(signupHandler)).Methods("POST")
+	*/
 
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -95,7 +97,7 @@ func main() {
 	})
 	r.Use(c.Handler)
 
-	http.ListenAndServe(":3000", r)
+	http.ListenAndServe(":8080", r)
 }
 func AllowOriginFunc(r *http.Request, origin string) bool {
 	if origin == "https://smallworld-0616.appspot.com" {
