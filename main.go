@@ -89,7 +89,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowedMethods: []string{"GET", "POST", "Delete", "PUT", "OPTIONS"},
 		AllowedHeaders: []string{"*"},
 	})
 	handler := c.Handler(r)
