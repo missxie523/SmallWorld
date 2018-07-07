@@ -16,6 +16,7 @@ import (
 	"reflect"
 	"strconv"
 	"cloud.google.com/go/bigtable"
+	"github.com/go-chi/cors"
 )
 
 type Location struct {
@@ -84,6 +85,24 @@ func main() {
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 
+	c := cors.New(cors.Options{
+		AllowOriginFunc:  AllowOriginFunc,
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	})
+	r.Use(c.Handler)
+
+	http.ListenAndServe(":3000", r)
+}
+func AllowOriginFunc(r *http.Request, origin string) bool {
+	if origin == "https://smallworld-0616.appspot.com" {
+		return true
+	}
+
+	return false
 }
 
 const (
@@ -95,7 +114,7 @@ const (
 	BT_INSTANCE = "smallworld-post-2-0617"
 	// Needs to update this URL if you deploy it to cloud.
 	//ES_URL = "http://35.224.38.226:9200"
-	ES_URL = "http://35.237.129.165:9200"
+	ES_URL = "http://104.196.194.16:9200"
 
 	// Needs to update this bucket based on your gcs bucket name.
 	BUCKET_NAME = "post-image-0616"
