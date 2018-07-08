@@ -19,6 +19,7 @@ import (
 
 	"cloud.google.com/go/bigtable"
 	"strings"
+	"github.com/go-chi/cors"
 )
 
 
@@ -127,6 +128,17 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("build")))
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "DELETE", "PUT", "OPTIONS"},
+		AllowedHeaders: []string{"*"},
+	})
+	handler := c.Handler(r)
+
+	log.Println("Listening on port 8080")
+	if err := http.ListenAndServe(":8080", handler); err != nil {
+		log.Fatal(err)
+	}
 
 }
 
