@@ -47,7 +47,7 @@ const (
 	PROJECT_ID = "smallworld-0616"
 	BT_INSTANCE = "smallworld-post-0708"
 	// Needs to update this URL if you deploy it to cloud.
-	ES_URL      = "http://35.226.97.122:9200"
+	ES_URL      = "http://35.237.129.165:9200"
 	BUCKET_NAME = "post-images-0708"
 	API_PREFIX      = "/api/v1"
 
